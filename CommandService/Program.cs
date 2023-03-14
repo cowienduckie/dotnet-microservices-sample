@@ -1,8 +1,8 @@
-using CommandService.Data;
-using Microsoft.EntityFrameworkCore;
-using CommandService.EventProcessing;
 using CommandService.AsyncDataServices;
+using CommandService.Data;
+using CommandService.EventProcessing;
 using CommandService.SyncDataServices.Grpc;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

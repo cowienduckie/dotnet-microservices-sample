@@ -39,9 +39,9 @@ public static class PrepDb
             Console.WriteLine("--> Seeding data ...");
 
             context.Platforms.AddRange(
-                new Platform() { Name = ".NET 6", Publisher = "Microsoft", Cost = "Free" },
-                new Platform() { Name = "SQL Server Express", Publisher = "Microsoft", Cost = "Free" },
-                new Platform() { Name = "Kubernetes", Publisher = "Cloud Native Computing Foundation", Cost = "Free" }
+                new Platform { Name = ".NET 6", Publisher = "Microsoft", Cost = "Free" },
+                new Platform { Name = "SQL Server Express", Publisher = "Microsoft", Cost = "Free" },
+                new Platform { Name = "Kubernetes", Publisher = "Cloud Native Computing Foundation", Cost = "Free" }
             );
 
             context.SaveChanges();

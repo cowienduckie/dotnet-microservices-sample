@@ -7,18 +7,15 @@ namespace PlatformService.AsyncDataServices;
 
 public class MessageBusClient : IMessageBusClient
 {
-    private readonly IConfiguration _configuration;
-    private readonly IConnection _connection = null!;
     private readonly IModel _channel = null!;
+    private readonly IConnection _connection = null!;
 
     public MessageBusClient(IConfiguration configuration)
     {
-        _configuration = configuration;
-
-        var factory = new ConnectionFactory()
+        var factory = new ConnectionFactory
         {
-            HostName = _configuration["RabbitMQHost"],
-            Port = int.Parse(_configuration["RabbitMQPort"])
+            HostName = configuration["RabbitMQHost"],
+            Port = int.Parse(configuration["RabbitMQPort"])
         };
 
         try
@@ -26,9 +23,9 @@ public class MessageBusClient : IMessageBusClient
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
 
-            _channel.ExchangeDeclare(exchange: "trigger", type: ExchangeType.Fanout);
+            _channel.ExchangeDeclare("trigger", ExchangeType.Fanout);
 
-            _connection.ConnectionShutdown += RabbitMQConnectionShutdown;
+            _connection.ConnectionShutdown += RabbitMqConnectionShutdown;
 
             Console.WriteLine("--> Connected to Message Bus");
         }
@@ -69,15 +66,15 @@ public class MessageBusClient : IMessageBusClient
     {
         var body = Encoding.UTF8.GetBytes(message);
 
-        _channel.BasicPublish(exchange: "trigger",
-                            routingKey: "",
-                            basicProperties: null,
-                            body: body);
+        _channel.BasicPublish("trigger",
+            "",
+            null,
+            body);
 
         Console.WriteLine($"--> We have sent {message}");
     }
 
-    private void RabbitMQConnectionShutdown(object? sender, ShutdownEventArgs e)
+    private void RabbitMqConnectionShutdown(object? sender, ShutdownEventArgs e)
     {
         Console.WriteLine("--> RabbitMQ Connection Shutdown");
     }

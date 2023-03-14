@@ -4,7 +4,7 @@ using PlatformService.AsyncDataServices;
 using PlatformService.Data;
 using PlatformService.Dtos;
 using PlatformService.Models;
-using PlatformService.SynDataService.Http;
+using PlatformService.SyncDataService.Http;
 
 namespace PlatformService.Controllers;
 
@@ -12,10 +12,10 @@ namespace PlatformService.Controllers;
 [ApiController]
 public class PlatformsController : ControllerBase
 {
-    private readonly IPlatformRepo _platformRepo;
-    private readonly IMapper _mapper;
     private readonly ICommandDataClient _commandDataClient;
+    private readonly IMapper _mapper;
     private readonly IMessageBusClient _messageBusClient;
+    private readonly IPlatformRepo _platformRepo;
 
     public PlatformsController(
         IPlatformRepo platformRepo,

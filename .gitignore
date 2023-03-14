@@ -367,3 +367,6 @@ FodyWeavers.xsd
 
 # MacOS
 .DS_store
+
+# Rider
+.idea/

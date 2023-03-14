@@ -9,8 +9,8 @@ public class MessageBusSubscriber : BackgroundService
 {
     private readonly IConfiguration _configuration;
     private readonly IEventProcessor _eventProcessor;
-    private IConnection _connection = null!;
     private IModel _channel = null!;
+    private IConnection _connection = null!;
     private string _queueName = null!;
 
     public MessageBusSubscriber(IConfiguration configuration, IEventProcessor eventProcessor)
@@ -18,7 +18,7 @@ public class MessageBusSubscriber : BackgroundService
         _configuration = configuration;
         _eventProcessor = eventProcessor;
 
-        InitializeRabbitMQ();
+        InitializeRabbitMq();
     }
 
     public override void Dispose()
@@ -38,7 +38,7 @@ public class MessageBusSubscriber : BackgroundService
 
         var consumer = new EventingBasicConsumer(_channel);
 
-        consumer.Received += (ModuleHandle, ea) =>
+        consumer.Received += (_, ea) =>
         {
             Console.WriteLine("--> Event Received!");
 
@@ -51,17 +51,17 @@ public class MessageBusSubscriber : BackgroundService
         };
 
         _channel.BasicConsume(
-            queue: _queueName,
-            autoAck: true,
-            consumer: consumer
+            _queueName,
+            true,
+            consumer
         );
 
         return Task.CompletedTask;
     }
 
-    private void InitializeRabbitMQ()
+    private void InitializeRabbitMq()
     {
-        var factory = new ConnectionFactory()
+        var factory = new ConnectionFactory
         {
             HostName = _configuration["RabbitMQHost"],
             Port = int.Parse(_configuration["RabbitMQPort"])
@@ -69,20 +69,20 @@ public class MessageBusSubscriber : BackgroundService
 
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
-        _channel.ExchangeDeclare(exchange: "trigger", type: ExchangeType.Fanout);
+        _channel.ExchangeDeclare("trigger", ExchangeType.Fanout);
         _queueName = _channel.QueueDeclare().QueueName;
         _channel.QueueBind(
-            queue: _queueName,
-            exchange: "trigger",
-            routingKey: ""
+            _queueName,
+            "trigger",
+            ""
         );
 
         Console.WriteLine("--> Listening on the Message Bus...");
 
-        _connection.ConnectionShutdown += RabbitMQConnectionShutdown;
+        _connection.ConnectionShutdown += RabbitMqConnectionShutdown;
     }
 
-    private void RabbitMQConnectionShutdown(object? sender, ShutdownEventArgs e)
+    private static void RabbitMqConnectionShutdown(object? sender, ShutdownEventArgs e)
     {
         Console.WriteLine("--> RabbitMQ Connection Shutdown");
     }

@@ -25,9 +25,9 @@ spec:
   selector:
     app: commandservice
   ports:
-  - name: commandservice
-    protocol: TCP
-    port: 80
-    targetPort: 80
+    - name: commandservice
+      protocol: TCP
+      port: 80
+      targetPort: 80
 
 

@@ -2,12 +2,12 @@ using System.Text;
 using System.Text.Json;
 using PlatformService.Dtos;
 
-namespace PlatformService.SynDataService.Http;
+namespace PlatformService.SyncDataService.Http;
 
 public class HttpCommandDataClient : ICommandDataClient
 {
-    private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
+    private readonly HttpClient _httpClient;
 
     public HttpCommandDataClient(HttpClient httpClient, IConfiguration configuration)
     {
@@ -32,9 +32,7 @@ public class HttpCommandDataClient : ICommandDataClient
         {
             Console.WriteLine("--> Sync POST to CommandService was OK!");
         }
-        else
-        {
-            Console.WriteLine("--> Sync POST to CommandService was failed!");
-        }
+
+        Console.WriteLine("--> Sync POST to CommandService was failed!");
     }
 }

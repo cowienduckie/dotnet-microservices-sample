@@ -8,8 +8,8 @@ namespace CommandService.EventProcessing;
 
 public class EventProcessor : IEventProcessor
 {
-    private readonly IServiceScopeFactory _scopeFactory;
     private readonly IMapper _mapper;
+    private readonly IServiceScopeFactory _scopeFactory;
 
     public EventProcessor(IServiceScopeFactory scopeFactory, IMapper mapper)
     {
@@ -78,7 +78,7 @@ public class EventProcessor : IEventProcessor
     }
 }
 
-enum EventType
+internal enum EventType
 {
     PlatformPublished,
     Undetermined

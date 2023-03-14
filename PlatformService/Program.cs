@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
-using PlatformService.Data;
-using PlatformService.SynDataService.Http;
-using PlatformService.AsyncDataServices;
-using PlatformService.SyncDataService.Grpc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
+using PlatformService.AsyncDataServices;
+using PlatformService.Data;
+using PlatformService.SyncDataService.Grpc;
+using PlatformService.SyncDataService.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,24 +18,18 @@ if (builder.Environment.IsProduction())
 else
 {
     builder.WebHost
-    .ConfigureKestrel(serverOptions =>
-    {
-        serverOptions.ListenLocalhost(
-            int.Parse(builder.Configuration["GrpcPort"]),
-            opt =>
-            {
-                opt.Protocols = HttpProtocols.Http2;
-            }
-        );
+        .ConfigureKestrel(serverOptions =>
+        {
+            serverOptions.ListenLocalhost(
+                int.Parse(builder.Configuration["GrpcPort"]),
+                opt => { opt.Protocols = HttpProtocols.Http2; }
+            );
 
-        serverOptions.ListenLocalhost(
-            int.Parse(builder.Configuration["WebApiPort"]),
-            opt =>
-            {
-                opt.Protocols = HttpProtocols.Http2;
-            }
-        );
-    });
+            serverOptions.ListenLocalhost(
+                int.Parse(builder.Configuration["WebApiPort"]),
+                opt => { opt.Protocols = HttpProtocols.Http2; }
+            );
+        });
 
     Console.WriteLine("--> Using InMem DB");
 
@@ -76,10 +70,8 @@ app.MapControllers();
 
 app.MapGrpcService<GrpcPlatformService>();
 
-app.MapGet("/protos/platform.proto", async context =>
-{
-    await context.Response.WriteAsync(await File.ReadAllTextAsync("Protos/platform.proto"));
-});
+app.MapGet("/protos/platform.proto",
+    async context => { await context.Response.WriteAsync(await File.ReadAllTextAsync("Protos/platform.proto")); });
 
 app.PrePopulation(app.Environment.IsProduction());
 

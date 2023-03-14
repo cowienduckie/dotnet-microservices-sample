@@ -6,8 +6,8 @@ namespace PlatformService.SyncDataService.Grpc;
 
 public class GrpcPlatformService : GrpcPlatform.GrpcPlatformBase
 {
-    private readonly IPlatformRepo _repository;
     private readonly IMapper _mapper;
+    private readonly IPlatformRepo _repository;
 
     public GrpcPlatformService(
         IPlatformRepo repository,

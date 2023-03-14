@@ -10,8 +10,8 @@ namespace CommandService.Controllers;
 [ApiController]
 public class CommandsController : ControllerBase
 {
-    private readonly ICommandRepo _repository;
     private readonly IMapper _mapper;
+    private readonly ICommandRepo _repository;
 
     public CommandsController(ICommandRepo repository, IMapper mapper)
     {
@@ -73,7 +73,7 @@ public class CommandsController : ControllerBase
 
         return CreatedAtAction(
             nameof(GetCommandForPlatform),
-            new { platformId = platformId, commandId = command.Id },
+            new { platformId, commandId = command.Id },
             readDto);
     }
 }
