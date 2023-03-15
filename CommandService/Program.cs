@@ -16,7 +16,7 @@ builder.Services.AddScoped<ICommandRepo, CommandRepo>();
 
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
 
-builder.Services.AddHostedService<MessageBusSubscriber>();
+builder.Services.AddHostedService<MessageBusSubscriber>(); // TODO: Comment this service to change to gRPC
 
 builder.Services.AddScoped<IPlatformDataClient, PlatformDataClient>();
 
