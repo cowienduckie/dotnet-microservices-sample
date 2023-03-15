@@ -1,4 +1,3 @@
-using CommandService.Models;
 using CommandService.Models.Platforms;
 using CommandService.SyncDataServices.Grpc;
 

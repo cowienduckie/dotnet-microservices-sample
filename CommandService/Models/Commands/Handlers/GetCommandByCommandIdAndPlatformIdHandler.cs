@@ -6,7 +6,9 @@ using MediatR;
 
 namespace CommandService.Models.Commands.Handlers;
 
-public class GetCommandByCommandIdAndPlatformIdHandler : IRequestHandler<GetCommandByCommandIdAndPlatformIdQuery, CommandReadDto?>
+public class
+    GetCommandByCommandIdAndPlatformIdHandler : IRequestHandler<GetCommandByCommandIdAndPlatformIdQuery, CommandReadDto
+        ?>
 {
     private readonly ICommandRepo _commandRepo;
     private readonly IMapper _mapper;
@@ -17,7 +19,8 @@ public class GetCommandByCommandIdAndPlatformIdHandler : IRequestHandler<GetComm
         _commandRepo = commandRepo;
     }
 
-    public Task<CommandReadDto?> Handle(GetCommandByCommandIdAndPlatformIdQuery request, CancellationToken cancellationToken)
+    public Task<CommandReadDto?> Handle(GetCommandByCommandIdAndPlatformIdQuery request,
+        CancellationToken cancellationToken)
     {
         if (!_commandRepo.PlatformExists(request.PlatformId))
         {

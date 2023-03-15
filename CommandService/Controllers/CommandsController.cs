@@ -1,8 +1,4 @@
-using AutoMapper;
-using CommandService.Data;
 using CommandService.Dtos;
-using CommandService.Models;
-using CommandService.Models.Commands;
 using CommandService.Models.Commands.Commands;
 using CommandService.Models.Commands.Queries;
 using MediatR;
@@ -31,7 +27,7 @@ public class CommandsController : ControllerBase
     }
 
     [HttpGet("{commandId}", Name = "GetCommandForPlatform")]
-    public async  Task<ActionResult<CommandReadDto>> GetCommandForPlatform(int platformId, int commandId)
+    public async Task<ActionResult<CommandReadDto>> GetCommandForPlatform(int platformId, int commandId)
     {
         var query = new GetCommandByCommandIdAndPlatformIdQuery(platformId, commandId);
         var result = await _mediator.Send(query);
@@ -45,7 +41,8 @@ public class CommandsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CommandReadDto>> CreateCommandForPlatform(int platformId, [FromBody] CreateCommandCommand command)
+    public async Task<ActionResult<CommandReadDto>> CreateCommandForPlatform(int platformId,
+        [FromBody] CreateCommandCommand command)
     {
         command.PlatformId = platformId;
         var result = await _mediator.Send(command);

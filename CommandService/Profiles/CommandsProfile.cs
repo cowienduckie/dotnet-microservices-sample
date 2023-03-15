@@ -1,6 +1,5 @@
 using AutoMapper;
 using CommandService.Dtos;
-using CommandService.Models;
 using CommandService.Models.Commands;
 using CommandService.Models.Commands.Commands;
 using CommandService.Models.Platforms;

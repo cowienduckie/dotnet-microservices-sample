@@ -9,7 +9,7 @@ public class CreateCommandCommand : IRequest<CommandReadDto?>
 {
     [JsonIgnore]
     public int PlatformId { get; set; }
-    
+
     [Required]
     public string HowTo { get; set; } = null!;
 

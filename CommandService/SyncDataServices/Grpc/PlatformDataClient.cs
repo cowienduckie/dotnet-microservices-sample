@@ -1,5 +1,4 @@
 using AutoMapper;
-using CommandService.Models;
 using CommandService.Models.Platforms;
 using Grpc.Net.Client;
 using PlatformService;
