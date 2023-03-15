@@ -32,7 +32,9 @@ public class HttpCommandDataClient : ICommandDataClient
         {
             Console.WriteLine("--> Sync POST to CommandService was OK!");
         }
-
-        Console.WriteLine("--> Sync POST to CommandService was failed!");
+        else
+        {
+            Console.WriteLine("--> Sync POST to CommandService was failed!");
+        }
     }
 }

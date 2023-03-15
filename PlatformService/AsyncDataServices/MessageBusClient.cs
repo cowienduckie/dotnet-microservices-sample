@@ -55,11 +55,13 @@ public class MessageBusClient : IMessageBusClient
     {
         Console.WriteLine("--> Message Bus Disposed");
 
-        if (_channel.IsOpen)
+        if (!_channel.IsOpen)
         {
-            _channel.Close();
-            _connection.Close();
+            return;
         }
+
+        _channel.Close();
+        _connection.Close();
     }
 
     private void SendMessage(string message)

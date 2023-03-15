@@ -17,20 +17,6 @@ if (builder.Environment.IsProduction())
 }
 else
 {
-    builder.WebHost
-        .ConfigureKestrel(serverOptions =>
-        {
-            serverOptions.ListenLocalhost(
-                int.Parse(builder.Configuration["GrpcPort"]),
-                opt => { opt.Protocols = HttpProtocols.Http2; }
-            );
-
-            serverOptions.ListenLocalhost(
-                int.Parse(builder.Configuration["WebApiPort"]),
-                opt => { opt.Protocols = HttpProtocols.Http2; }
-            );
-        });
-
     Console.WriteLine("--> Using InMem DB");
 
     builder.Services.AddDbContext<AppDbContext>(
@@ -61,8 +47,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

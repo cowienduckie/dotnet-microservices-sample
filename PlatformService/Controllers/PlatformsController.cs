@@ -56,7 +56,7 @@ public class PlatformsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<PlatformReadDto>> CreatePlatform([FromBody] PlatformCreateDto createDto)
+    public ActionResult<PlatformReadDto> CreatePlatform([FromBody] PlatformCreateDto createDto)
     {
         Console.WriteLine("--> Creating Platform ...");
 
@@ -66,15 +66,6 @@ public class PlatformsController : ControllerBase
         _platformRepo.SaveChanges();
 
         var readDto = _mapper.Map<PlatformReadDto>(platform);
-
-        try
-        {
-            await _commandDataClient.SendPlatformToCommand(readDto);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"--> Could not send synchronously: {ex}");
-        }
 
         try
         {
