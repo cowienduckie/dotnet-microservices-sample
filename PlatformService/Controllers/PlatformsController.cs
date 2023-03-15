@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using PlatformService.Commands;
 using PlatformService.Dtos;
-using PlatformService.Queries;
+using PlatformService.Models.Platforms.Commands;
+using PlatformService.Models.Platforms.Queries;
 
 namespace PlatformService.Controllers;
 

@@ -1,12 +1,11 @@
 using AutoMapper;
 using MediatR;
 using PlatformService.AsyncDataServices;
-using PlatformService.Commands;
 using PlatformService.Data;
 using PlatformService.Dtos;
-using PlatformService.Models;
+using PlatformService.Models.Platforms.Commands;
 
-namespace PlatformService.Handlers;
+namespace PlatformService.Models.Platforms.Handlers;
 
 public class CreatePlatformHandler : IRequestHandler<CreatePlatformCommand, PlatformReadDto>
 {

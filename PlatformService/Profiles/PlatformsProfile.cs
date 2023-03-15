@@ -1,7 +1,8 @@
 using AutoMapper;
-using PlatformService.Commands;
 using PlatformService.Dtos;
 using PlatformService.Models;
+using PlatformService.Models.Platforms;
+using PlatformService.Models.Platforms.Commands;
 
 namespace PlatformService.Profiles;
 

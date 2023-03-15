@@ -1,7 +1,7 @@
 using MediatR;
 using PlatformService.Dtos;
 
-namespace PlatformService.Queries;
+namespace PlatformService.Models.Platforms.Queries;
 
 public class GetPlatformByIdQuery : IRequest<PlatformReadDto?>
 {

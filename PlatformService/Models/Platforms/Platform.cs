@@ -1,11 +1,13 @@
 using System.ComponentModel.DataAnnotations;
-using MediatR;
-using PlatformService.Dtos;
 
-namespace PlatformService.Commands;
+namespace PlatformService.Models.Platforms;
 
-public class CreatePlatformCommand : IRequest<PlatformReadDto>
+public class Platform
 {
+    [Key]
+    [Required]
+    public int Id { get; set; }
+
     [Required]
     public string Name { get; set; } = null!;
 

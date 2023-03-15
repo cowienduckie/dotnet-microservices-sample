@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PlatformService.Models;
+using PlatformService.Models.Platforms;
 
 namespace PlatformService.Data;
 

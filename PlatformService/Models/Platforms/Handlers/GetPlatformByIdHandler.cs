@@ -2,9 +2,9 @@ using AutoMapper;
 using MediatR;
 using PlatformService.Data;
 using PlatformService.Dtos;
-using PlatformService.Queries;
+using PlatformService.Models.Platforms.Queries;
 
-namespace PlatformService.Handlers;
+namespace PlatformService.Models.Platforms.Handlers;
 
 public class GetPlatformByIdHandler : IRequestHandler<GetPlatformByIdQuery, PlatformReadDto?>
 {
