@@ -1,18 +1,15 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using CommandService.Dtos;
+using MediatR;
 
-namespace CommandService.Models;
+namespace CommandService.Models.Commands.Commands;
 
-public class Command
+public class CreateCommandCommand : IRequest<CommandReadDto?>
 {
-    [Key]
-    [Required]
-    public int Id { get; set; }
-
-    [Required]
+    [JsonIgnore]
     public int PlatformId { get; set; }
-
-    public Platform Platform { get; set; } = null!;
-
+    
     [Required]
     public string HowTo { get; set; } = null!;
 

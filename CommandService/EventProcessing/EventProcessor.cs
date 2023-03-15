@@ -3,6 +3,7 @@ using AutoMapper;
 using CommandService.Data;
 using CommandService.Dtos;
 using CommandService.Models;
+using CommandService.Models.Platforms;
 
 namespace CommandService.EventProcessing;
 

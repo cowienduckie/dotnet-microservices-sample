@@ -2,6 +2,10 @@ using AutoMapper;
 using CommandService.Data;
 using CommandService.Dtos;
 using CommandService.Models;
+using CommandService.Models.Commands;
+using CommandService.Models.Commands.Commands;
+using CommandService.Models.Commands.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommandService.Controllers;
@@ -10,70 +14,50 @@ namespace CommandService.Controllers;
 [ApiController]
 public class CommandsController : ControllerBase
 {
-    private readonly IMapper _mapper;
-    private readonly ICommandRepo _repository;
+    private readonly IMediator _mediator;
 
-    public CommandsController(ICommandRepo repository, IMapper mapper)
+    public CommandsController(IMediator mediator)
     {
-        _repository = repository;
-        _mapper = mapper;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<CommandReadDto>> GetCommandsForPlatform(int platformId)
+    public async Task<ActionResult<IEnumerable<CommandReadDto>>> GetCommandsForPlatform(int platformId)
     {
-        Console.WriteLine($"--> Hit GetCommandsForPlatform: {platformId}");
+        var query = new GetAllCommandsByPlatformIdQuery(platformId);
+        var result = await _mediator.Send(query);
 
-        if (!_repository.PlatformExists(platformId))
-        {
-            return NotFound();
-        }
-
-        var commandItems = _repository.GetCommandsForPlatform(platformId);
-
-        return Ok(_mapper.Map<IEnumerable<CommandReadDto>>(commandItems));
+        return Ok(result);
     }
 
     [HttpGet("{commandId}", Name = "GetCommandForPlatform")]
-    public ActionResult<CommandReadDto> GetCommandForPlatform(int platformId, int commandId)
+    public async  Task<ActionResult<CommandReadDto>> GetCommandForPlatform(int platformId, int commandId)
     {
-        Console.WriteLine($"--> Hit GetCommandForPlatform: {platformId}");
+        var query = new GetCommandByCommandIdAndPlatformIdQuery(platformId, commandId);
+        var result = await _mediator.Send(query);
 
-        if (!_repository.PlatformExists(platformId))
+        if (result == null)
         {
             return NotFound();
         }
 
-        var commandItem = _repository.GetCommand(platformId, commandId);
-
-        if (commandItem == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(_mapper.Map<CommandReadDto>(commandItem));
+        return Ok(result);
     }
 
     [HttpPost]
-    public ActionResult<CommandReadDto> CreateCommandForPlatform(int platformId, [FromBody] CommandCreateDto createDto)
+    public async Task<ActionResult<CommandReadDto>> CreateCommandForPlatform(int platformId, [FromBody] CreateCommandCommand command)
     {
-        Console.WriteLine($"--> Hit CreateCommandForPlatform: {platformId}");
+        command.PlatformId = platformId;
+        var result = await _mediator.Send(command);
 
-        if (!_repository.PlatformExists(platformId))
+        if (result == null)
         {
             return NotFound();
         }
 
-        var command = _mapper.Map<Command>(createDto);
-
-        _repository.CreateCommand(platformId, command);
-        _repository.SaveChanges();
-
-        var readDto = _mapper.Map<CommandReadDto>(command);
-
         return CreatedAtAction(
             nameof(GetCommandForPlatform),
-            new { platformId, commandId = command.Id },
-            readDto);
+            new { platformId, commandId = result.Id },
+            result);
     }
 }

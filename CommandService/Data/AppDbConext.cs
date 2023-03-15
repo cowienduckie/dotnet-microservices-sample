@@ -1,4 +1,6 @@
 using CommandService.Models;
+using CommandService.Models.Commands;
+using CommandService.Models.Platforms;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommandService.Data;
