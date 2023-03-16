@@ -9,9 +9,9 @@ namespace PlatformService.Models.Platforms.Handlers;
 
 public class CreatePlatformHandler : IRequestHandler<CreatePlatformCommand, PlatformReadDto>
 {
+    private readonly ICommandDataClient _commandDataClient;
     private readonly IMapper _mapper;
     private readonly IPlatformRepo _platformRepo;
-    private readonly ICommandDataClient _commandDataClient;
 
     public CreatePlatformHandler(IPlatformRepo platformRepo, IMapper mapper, ICommandDataClient commandDataClient)
     {

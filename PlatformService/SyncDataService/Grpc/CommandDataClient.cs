@@ -19,7 +19,7 @@ public class CommandDataClient : ICommandDataClient
     public void PublishPlatform(Platform platform)
     {
         Console.WriteLine($"--> Calling GRPC Service {_configuration["GrpcCommand"]}");
-        
+
         var channel = GrpcChannel.ForAddress(_configuration["GrpcCommand"]);
         var client = new GrpcCommand.GrpcCommandClient(channel);
         var request = new PublishPlatformRequest

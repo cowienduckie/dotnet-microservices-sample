@@ -16,7 +16,8 @@ public class GrpcCommandService : GrpcCommand.GrpcCommandBase
         _mapper = mapper;
     }
 
-    public override Task<PublishPlatformResponse> PublishPlatform(PublishPlatformRequest request, ServerCallContext context)
+    public override Task<PublishPlatformResponse> PublishPlatform(PublishPlatformRequest request,
+        ServerCallContext context)
     {
         var plat = _mapper.Map<Platform>(request.Platform);
 
