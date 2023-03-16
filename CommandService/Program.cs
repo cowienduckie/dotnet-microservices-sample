@@ -1,7 +1,5 @@
 using System.Reflection;
-using CommandService.AsyncDataServices;
 using CommandService.Data;
-using CommandService.EventProcessing;
 using CommandService.SyncDataServices.Grpc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,9 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMe
 
 builder.Services.AddScoped<ICommandRepo, CommandRepo>();
 
-builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
-
-builder.Services.AddHostedService<MessageBusSubscriber>(); // TODO: Comment this service to change to gRPC
+builder.Services.AddGrpc();
 
 builder.Services.AddScoped<IPlatformDataClient, PlatformDataClient>();
 
@@ -39,6 +35,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGrpcService<GrpcCommandService>();
+
+app.MapGet("/protos/commands.proto",
+    async context => { await context.Response.WriteAsync(await File.ReadAllTextAsync("Protos/commands.proto")); });
 
 app.PrepPopulation();
 
