@@ -36,8 +36,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-Console.WriteLine($"--> CommandService Endpoint {builder.Configuration["CommandService"]}");
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
