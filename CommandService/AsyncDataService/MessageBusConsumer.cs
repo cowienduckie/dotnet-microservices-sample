@@ -1,25 +1,25 @@
 using AutoMapper;
 using CommandService.Data;
 using CommandService.Models.Platforms;
-using Grpc.Core;
+using MassTransit;
+using Shared.Dtos;
 
-namespace CommandService.SyncDataServices.Grpc;
+namespace CommandService.AsyncDataService;
 
-public class GrpcCommandService : GrpcCommand.GrpcCommandBase
+public class MessageBusConsumer : IConsumer<PlatformPublishedDto>
 {
     private readonly ICommandRepo _commandRepo;
     private readonly IMapper _mapper;
 
-    public GrpcCommandService(ICommandRepo commandRepo, IMapper mapper)
+    public MessageBusConsumer(IMapper mapper, ICommandRepo commandRepo)
     {
-        _commandRepo = commandRepo;
         _mapper = mapper;
+        _commandRepo = commandRepo;
     }
 
-    public override Task<PublishPlatformResponse> PublishPlatform(PublishPlatformRequest request,
-        ServerCallContext context)
+    public Task Consume(ConsumeContext<PlatformPublishedDto> context)
     {
-        var plat = _mapper.Map<Platform>(request.Platform);
+        var plat = _mapper.Map<Platform>(context.Message);
 
         if (!_commandRepo.ExternalPlatformExists(plat.ExternalId))
         {
@@ -33,6 +33,6 @@ public class GrpcCommandService : GrpcCommand.GrpcCommandBase
             Console.WriteLine("--> Platform already exists");
         }
 
-        return Task.FromResult(new PublishPlatformResponse());
+        return Task.CompletedTask;
     }
 }

@@ -1,26 +1,27 @@
 using AutoMapper;
 using MediatR;
+using PlatformService.AsyncDataService;
 using PlatformService.Data;
 using PlatformService.Dtos;
 using PlatformService.Models.Platforms.Commands;
-using PlatformService.SyncDataService.Grpc;
+using Shared.Dtos;
 
 namespace PlatformService.Models.Platforms.Handlers;
 
 public class CreatePlatformHandler : IRequestHandler<CreatePlatformCommand, PlatformReadDto>
 {
-    private readonly ICommandDataClient _commandDataClient;
     private readonly IMapper _mapper;
+    private readonly IMessageBusClient _messageBusClient;
     private readonly IPlatformRepo _platformRepo;
 
-    public CreatePlatformHandler(IPlatformRepo platformRepo, IMapper mapper, ICommandDataClient commandDataClient)
+    public CreatePlatformHandler(IPlatformRepo platformRepo, IMapper mapper, IMessageBusClient messageBusClient)
     {
         _platformRepo = platformRepo;
         _mapper = mapper;
-        _commandDataClient = commandDataClient;
+        _messageBusClient = messageBusClient;
     }
 
-    public Task<PlatformReadDto> Handle(CreatePlatformCommand request, CancellationToken cancellationToken)
+    public async Task<PlatformReadDto> Handle(CreatePlatformCommand request, CancellationToken cancellationToken)
     {
         var platform = _mapper.Map<Platform>(request);
 
@@ -29,8 +30,8 @@ public class CreatePlatformHandler : IRequestHandler<CreatePlatformCommand, Plat
 
         var readDto = _mapper.Map<PlatformReadDto>(platform);
 
-        _commandDataClient.PublishPlatform(platform);
+        await _messageBusClient.PublishNewPlatform(_mapper.Map<PlatformPublishedDto>(readDto));
 
-        return Task.FromResult(readDto);
+        return readDto;
     }
 }

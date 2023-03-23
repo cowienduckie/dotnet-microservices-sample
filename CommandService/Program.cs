@@ -1,6 +1,8 @@
 using System.Reflection;
+using CommandService.AsyncDataService;
 using CommandService.Data;
 using CommandService.SyncDataServices.Grpc;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +17,25 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMe
 
 builder.Services.AddScoped<ICommandRepo, CommandRepo>();
 
-builder.Services.AddGrpc();
-
 builder.Services.AddScoped<IPlatformDataClient, PlatformDataClient>();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<MessageBusConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(
+            builder.Configuration["RabbitmqHost"],
+            h =>
+            {
+                h.Username(builder.Configuration["RabbitmqUsername"]);
+                h.Password(builder.Configuration["RabbitmqPassword"]);
+            });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -35,11 +53,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapGrpcService<GrpcCommandService>();
-
-app.MapGet("/protos/commands.proto",
-    async context => { await context.Response.WriteAsync(await File.ReadAllTextAsync("Protos/commands.proto")); });
 
 app.PrepPopulation();
 
